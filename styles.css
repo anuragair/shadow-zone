@@ -1,0 +1,173 @@
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #121212;
+    color: #FFFFFF;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #1E1E1E;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    color: #B0B0B0;
+    text-decoration: none;
+}
+
+.cta {
+    background-color: #6A0DAD;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: url('enter the url') no-repeat center center/cover;
+}
+
+.hero h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 10px;
+    margin-bottom: 30px;
+}
+
+#features {
+    padding: 40px 20px;
+    text-align: center;
+    gap: 10px;
+}
+
+.feature-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.feature-card {
+    background-color: #1E1E1E;
+    border: 1px solid #6A0DAD;
+    border-radius: 8px;
+    padding: 20px;
+    width: 150px;
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: scale(1.05);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1E1E1E;
+}
+
+/* Form Styles */
+main {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 30%;
+    padding: 3px;
+    border: 1px solid #0b0606;
+    border-radius: 3px;
+}
+
+button.cta {
+    margin-top: 10px;
+
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .feature-card {
+        width: 90%;
+    }
+
+    .mobile-menu {
+        display: block; /* Show mobile menu toggle */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 24px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .feature-card {
+        width: 100%;
+    }
+
+    .cta {
+        width: 100%;
+        padding: 15px;
+    }
+}
