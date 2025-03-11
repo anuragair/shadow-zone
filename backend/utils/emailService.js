@@ -2,20 +2,29 @@ const nodemailer = require('nodemailer');
 
 // Create a test account using Ethereal (for development)
 const createTestAccount = async () => {
-    const testAccount = await nodemailer.createTestAccount();
-    return nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false,
-        auth: {
-            user: testAccount.user,
-            pass: testAccount.pass,
-        },
-    });
+    try {
+        const testAccount = await nodemailer.createTestAccount();
+        return nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            secure: false,
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass,
+            },
+        });
+    } catch (error) {
+        console.error('Error creating test account:', error);
+        return null;
+    }
 };
 
 // In production, you would use your actual email service
 const createProductionTransport = () => {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.error('Email credentials not configured');
+        return null;
+    }
     return nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -32,6 +41,11 @@ const sendOTPEmail = async (email, otp) => {
             ? createProductionTransport()
             : await createTestAccount();
         
+        if (!transporter) {
+            console.error('Failed to create email transport');
+            return false;
+        }
+
         const info = await transporter.sendMail({
             from: '"Shadow Zone" <noreply@shadowzone.com>',
             to: email,
@@ -56,6 +70,9 @@ const sendOTPEmail = async (email, otp) => {
         return true;
     } catch (error) {
         console.error('Error sending email:', error);
+        if (error.code === 'EAUTH') {
+            console.error('Authentication failed. Check email credentials.');
+        }
         return false;
     }
 };

@@ -92,39 +92,50 @@ const signin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Generate and send OTP for signin
-        const otp = generateOTP();
-        
-        const [users] = await db.query(
-            'SELECT * FROM users WHERE email = ?',
-            [email]
-        );
-
-        if (users.length === 0) {
-            return res.status(400).json({ message: 'User not found' });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
         }
 
-        const user = users[0];
-        const validPassword = await bcrypt.compare(password, user.password);
+        // Check database connection
+        try {
+            const [users] = await db.query(
+                'SELECT * FROM users WHERE email = ?',
+                [email]
+            );
 
-        if (!validPassword) {
-            return res.status(400).json({ message: 'Invalid password' });
+            if (users.length === 0) {
+                return res.status(400).json({ message: 'User not found' });
+            }
+
+            const user = users[0];
+            const validPassword = await bcrypt.compare(password, user.password);
+
+            if (!validPassword) {
+                return res.status(400).json({ message: 'Invalid password' });
+            }
+
+            // Generate OTP for signin
+            const otp = generateOTP();
+            
+            // Store OTP for verification
+            otpStore.set(email, {
+                otp,
+                userId: user.id,
+                timestamp: Date.now()
+            });
+
+            // Send OTP via email
+            const emailSent = await sendOTPEmail(email, otp);
+            if (!emailSent) {
+                console.error('Failed to send OTP email');
+                return res.status(500).json({ message: 'Failed to send OTP' });
+            }
+
+            res.json({ message: 'OTP sent to your email' });
+        } catch (dbError) {
+            console.error('Database error:', dbError);
+            return res.status(500).json({ message: 'Database error occurred' });
         }
-
-        // Store OTP for verification
-        otpStore.set(email, {
-            otp,
-            userId: user.id,
-            timestamp: Date.now()
-        });
-
-        // Send OTP via email
-        const emailSent = await sendOTPEmail(email, otp);
-        if (!emailSent) {
-            return res.status(500).json({ message: 'Failed to send OTP' });
-        }
-
-        res.json({ message: 'OTP sent to your email' });
     } catch (error) {
         console.error('Error in signin:', error);
         res.status(500).json({ message: 'Error signing in' });
