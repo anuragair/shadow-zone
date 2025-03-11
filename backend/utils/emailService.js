@@ -27,8 +27,10 @@ const createProductionTransport = () => {
 
 const sendOTPEmail = async (email, otp) => {
     try {
-        // Use test account for development
-        const transporter = await createTestAccount();
+        // Use production transport if EMAIL_USER is set, otherwise use test account
+        const transporter = process.env.EMAIL_USER 
+            ? createProductionTransport()
+            : await createTestAccount();
         
         const info = await transporter.sendMail({
             from: '"Shadow Zone" <noreply@shadowzone.com>',
@@ -47,7 +49,9 @@ const sendOTPEmail = async (email, otp) => {
 
         console.log("Email sent: %s", info.messageId);
         // For development: Log URL where you can preview the email
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        if (!process.env.EMAIL_USER) {
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        }
         
         return true;
     } catch (error) {
