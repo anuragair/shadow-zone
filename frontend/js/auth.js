@@ -1,33 +1,40 @@
-// Auth0 configuration
+import { createAuth0Client } from '@auth0/auth0-spa-js';
+
 let auth0Client = null;
 
 // Initialize Auth0 client
 async function initializeAuth0() {
-    auth0Client = await createAuth0Client({
-        domain: 'dev-2d67b8khfvv4gi3r.us.auth0.com',
-        client_id: 'fxLq0MdyEHshCX8hRgczuLXosn9xq3db',
-        redirect_uri: 'https://shadowzone.netlify.app/callback'
-    });
+    try {
+        auth0Client = await createAuth0Client({
+            domain: 'dev-2d67b8khfvv4gi3r.us.auth0.com',
+            client_id: 'Gy7RxKFNqwvEGBBHhiZZvBTNtVODGPB5',
+            redirect_uri: 'https://shadowzone.netlify.app/callback.html',
+            cacheLocation: 'localstorage'
+        });
 
-    // Check if user was redirected after login
-    if (window.location.search.includes("code=")) {
-        try {
-            // Handle the redirect and get the user
-            await auth0Client.handleRedirectCallback();
-            const user = await auth0Client.getUser();
-            console.log("User logged in:", user);
-            
-            // Store auth state
-            localStorage.setItem('isLoggedIn', 'true');
-            
-            // Redirect to dashboard or home page
-            window.location.href = '/dashboard.html';
-        } catch (error) {
-            console.error("Error handling redirect:", error);
+        // Check if user was redirected after login
+        if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
+            try {
+                // Handle the redirect and get the user
+                await auth0Client.handleRedirectCallback();
+                window.history.replaceState({}, document.title, window.location.pathname);
+                await updateUI();
+                
+                // Redirect to dashboard if on callback page
+                if (window.location.pathname === '/callback.html') {
+                    window.location.href = '/dashboard.html';
+                }
+            } catch (error) {
+                console.error("Error handling redirect:", error);
+                showError("Error handling login redirect");
+            }
+        } else {
+            await updateUI();
         }
+    } catch (error) {
+        console.error("Error initializing Auth0:", error);
+        showError("Error initializing authentication");
     }
-
-    updateUI();
 }
 
 // Update UI based on authentication state
@@ -42,7 +49,6 @@ async function updateUI() {
         const profileSection = document.getElementById('profileSection');
         
         if (isAuthenticated) {
-            // User is authenticated
             const user = await auth0Client.getUser();
             
             if (loginBtn) loginBtn.style.display = 'none';
@@ -54,7 +60,6 @@ async function updateUI() {
                 if (userEmail) userEmail.textContent = user.email;
             }
         } else {
-            // User is not authenticated
             if (loginBtn) loginBtn.style.display = 'block';
             if (signupBtn) signupBtn.style.display = 'block';
             if (logoutBtn) logoutBtn.style.display = 'none';
@@ -62,6 +67,7 @@ async function updateUI() {
         }
     } catch (error) {
         console.error("Error updating UI:", error);
+        showError("Error updating interface");
     }
 }
 
@@ -69,10 +75,11 @@ async function updateUI() {
 async function login() {
     try {
         await auth0Client.loginWithRedirect({
-            redirect_uri: 'https://shadowzone.netlify.app/callback'
+            redirect_uri: 'https://shadowzone.netlify.app/callback.html'
         });
     } catch (error) {
         console.error("Error during login:", error);
+        showError("Error initiating login");
     }
 }
 
@@ -80,11 +87,25 @@ async function login() {
 async function signup() {
     try {
         await auth0Client.loginWithRedirect({
-            redirect_uri: 'https://shadowzone.netlify.app/callback',
+            redirect_uri: 'https://shadowzone.netlify.app/callback.html',
             screen_hint: 'signup'
         });
     } catch (error) {
         console.error("Error during signup:", error);
+        showError("Error initiating signup");
+    }
+}
+
+// Signup with Google function
+async function signupWithGoogle() {
+    try {
+        await auth0Client.loginWithRedirect({
+            redirect_uri: 'https://shadowzone.netlify.app/callback.html',
+            connection: 'google-oauth2'
+        });
+    } catch (error) {
+        console.error("Error during Google signup:", error);
+        showError("Error initiating Google signup");
     }
 }
 
@@ -94,11 +115,21 @@ async function logout() {
         await auth0Client.logout({
             returnTo: 'https://shadowzone.netlify.app'
         });
-        localStorage.removeItem('isLoggedIn');
     } catch (error) {
         console.error("Error during logout:", error);
+        showError("Error logging out");
     }
 }
 
-// Initialize when the page loads
+// Show error message
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 3000);
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', initializeAuth0); 
 window.onload = initializeAuth0; 
