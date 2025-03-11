@@ -8,19 +8,14 @@ if (!token) {
     window.location.href = '/signin.html';
 }
 
-// Get user data
-const user = JSON.parse(localStorage.getItem('user'));
-
-// DOM Elements
-const notesList = document.getElementById('notesList');
 const addNoteForm = document.getElementById('addNoteForm');
-const noteInput = document.getElementById('noteInput');
-const userDisplay = document.getElementById('userDisplay');
+const notesList = document.getElementById('notesList');
 const signOutBtn = document.getElementById('signOutBtn');
+const userDisplay = document.getElementById('userDisplay');
 
-// Display username
+// Display welcome message
 if (userDisplay) {
-    userDisplay.textContent = `Welcome, ${user.email || user.phone}`;
+    userDisplay.textContent = 'Welcome to Shadow Zone';
 }
 
 // Load notes
@@ -45,8 +40,6 @@ async function loadNotes() {
 
 // Display notes
 function displayNotes(notes) {
-    if (!notesList) return;
-    
     notesList.innerHTML = '';
     notes.forEach(note => {
         const noteElement = document.createElement('div');
@@ -111,8 +104,6 @@ window.deleteNote = async (noteId) => {
 // Sign out
 signOutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('isLoggedIn');
     window.location.href = '/signin.html';
 });
 
