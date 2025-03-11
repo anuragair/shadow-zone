@@ -131,5 +131,7 @@ function showError(message) {
 }
 
 // Initialize when page loads
-document.addEventListener('DOMContentLoaded', initializeAuth0); 
-window.onload = initializeAuth0; 
+document.addEventListener('DOMContentLoaded', initializeAuth0);
+
+// Export functions for use in other files
+export { login, signup, signupWithGoogle, logout }; 
