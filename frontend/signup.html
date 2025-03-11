@@ -6,7 +6,7 @@
     <title>Sign Up - Shadow Zone</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="auth-container">
@@ -60,6 +60,7 @@
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
+                        <p class="help-text">Password must be at least 6 characters long</p>
                     </div>
                     <div class="error" id="signupError"></div>
                     <div class="success" id="signupSuccess"></div>
@@ -75,7 +76,7 @@
                             <i class="fas fa-key"></i>
                             Verification Code
                         </label>
-                        <input type="text" id="otp" required placeholder="Enter 6-digit code" maxlength="6">
+                        <input type="text" id="otp" required placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]*" inputmode="numeric">
                         <p class="help-text">We've sent a verification code to your email</p>
                     </div>
                     <div class="error" id="otpError"></div>
@@ -86,12 +87,12 @@
                 </form>
 
                 <div class="auth-footer">
-                    <p>Already have an account? <a href="/signin.html">Sign In</a></p>
+                    <p>Already have an account? <a href="signin.html">Sign In</a></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="/js/signup.js" type="module"></script>
+    <script type="module" src="js/signup.js"></script>
 </body>
 </html>
