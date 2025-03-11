@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 </head>
 <body>
     <div class="auth-container">
@@ -41,50 +42,19 @@
                     <p>Join Shadow Zone and take control of your digital life</p>
                 </div>
 
-                <form id="signupForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="email">
-                            <i class="fas fa-envelope"></i>
-                            Email address
-                        </label>
-                        <input type="email" id="email" required placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">
-                            <i class="fas fa-lock"></i>
-                            Password
-                        </label>
-                        <div class="password-input">
-                            <input type="password" id="password" required placeholder="Create a strong password">
-                            <button type="button" class="toggle-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <p class="help-text">Password must be at least 6 characters long</p>
-                    </div>
-                    <div class="error" id="signupError"></div>
-                    <div class="success" id="signupSuccess"></div>
-                    <button type="submit" class="btn-primary">
-                        <span>Create Account</span>
-                        <i class="fas fa-arrow-right"></i>
+                <div class="auth-buttons">
+                    <button onclick="signup()" class="btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        <span>Sign up with Email</span>
                     </button>
-                </form>
-
-                <form id="otpForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="otp">
-                            <i class="fas fa-key"></i>
-                            Verification Code
-                        </label>
-                        <input type="text" id="otp" required placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]*" inputmode="numeric">
-                        <p class="help-text">We've sent a verification code to your email</p>
+                    <div class="auth-divider">
+                        <span>or</span>
                     </div>
-                    <div class="error" id="otpError"></div>
-                    <button type="submit" class="btn-primary">
-                        <span>Verify Account</span>
-                        <i class="fas fa-check"></i>
+                    <button onclick="signupWithGoogle()" class="btn-secondary">
+                        <i class="fab fa-google"></i>
+                        <span>Continue with Google</span>
                     </button>
-                </form>
+                </div>
 
                 <div class="auth-footer">
                     <p>Already have an account? <a href="signin.html">Sign In</a></p>
@@ -93,6 +63,20 @@
         </div>
     </div>
 
-    <script type="module" src="js/signup.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Additional signup with Google function
+        async function signupWithGoogle() {
+            try {
+                await auth0Client.loginWithRedirect({
+                    redirect_uri: 'https://shadowzone.netlify.app/callback',
+                    screen_hint: 'signup',
+                    connection: 'google-oauth2'
+                });
+            } catch (error) {
+                console.error("Error during Google signup:", error);
+            }
+        }
+    </script>
 </body>
 </html>
