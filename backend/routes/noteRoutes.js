@@ -1,14 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const noteController = require('../controllers/noteController');
+const { getNotes, createNote, deleteNote } = require('../controllers/noteController');
 const auth = require('../middleware/auth');
 
-// All routes are protected with auth middleware
+// Apply auth middleware to all routes
 router.use(auth);
 
-// Note routes
-router.get('/', noteController.getNotes);
-router.post('/', noteController.createNote);
-router.delete('/:id', noteController.deleteNote);
+// Route to get all notes
+router.get('/', getNotes);
+
+// Route to create a new note
+router.post('/', createNote);
+
+// Route to delete a note
+router.delete('/:id', deleteNote);
 
 module.exports = router; 
