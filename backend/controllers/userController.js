@@ -15,6 +15,12 @@ const signup = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        if (!email || !password) {
+            console.log('Missing email or password');
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+
+        console.log('Checking for existing user:', email);
         // Check if user already exists
         const [existingUsers] = await db.query(
             'SELECT * FROM users WHERE email = ?',
@@ -22,27 +28,46 @@ const signup = async (req, res) => {
         );
 
         if (existingUsers.length > 0) {
+            console.log('User already exists:', email);
             return res.status(400).json({ message: 'User already exists' });
         }
 
         // Generate and store OTP
         const otp = generateOTP();
+        console.log('Generated OTP for:', email);
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
         otpStore.set(email, {
             otp,
-            password: await bcrypt.hash(password, 10),
+            password: hashedPassword,
             timestamp: Date.now()
         });
 
         // Send OTP via email
+        console.log('Attempting to send OTP email to:', email);
         const emailSent = await sendOTPEmail(email, otp);
+        
         if (!emailSent) {
-            return res.status(500).json({ message: 'Failed to send OTP' });
+            console.error('Failed to send OTP email to:', email);
+            return res.status(500).json({ 
+                message: 'Failed to send OTP. Please check your email address or try again later.'
+            });
         }
 
+        console.log('OTP sent successfully to:', email);
         res.json({ message: 'OTP sent to your email' });
     } catch (error) {
         console.error('Error in signup:', error);
-        res.status(500).json({ message: 'Error creating user' });
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+        if (error.code === 'ECONNREFUSED') {
+            return res.status(500).json({ message: 'Database connection failed' });
+        }
+        res.status(500).json({ 
+            message: 'An error occurred during signup. Please try again later.',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 

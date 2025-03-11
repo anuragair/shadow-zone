@@ -61,6 +61,7 @@ signupForm.addEventListener('submit', async (e) => {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
         submitButton.disabled = true;
         
+        console.log('Attempting to create account with email:', email);
         const response = await fetch(`${config.API_URL}/users/signup`, {
             method: 'POST',
             headers: {
@@ -70,6 +71,7 @@ signupForm.addEventListener('submit', async (e) => {
         });
 
         const data = await response.json();
+        console.log('Signup response:', data);
 
         if (!response.ok) {
             throw new Error(data.message || 'Signup failed');
@@ -77,6 +79,7 @@ signupForm.addEventListener('submit', async (e) => {
 
         userEmail = email;
         signupSuccess.textContent = 'OTP sent to your email';
+        console.log('OTP sent successfully to:', email);
         
         // Smooth transition between forms
         signupForm.style.opacity = '0';
@@ -89,6 +92,7 @@ signupForm.addEventListener('submit', async (e) => {
             }, 50);
         }, 300);
     } catch (error) {
+        console.error('Signup error:', error);
         signupSuccess.textContent = '';
         signupError.textContent = error.message;
     } finally {

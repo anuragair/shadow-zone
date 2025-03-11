@@ -42,10 +42,12 @@ const sendOTPEmail = async (email, otp) => {
             : await createTestAccount();
         
         if (!transporter) {
-            console.error('Failed to create email transport');
+            console.error('Failed to create email transport. Email credentials missing or invalid.');
             return false;
         }
 
+        console.log('Sending email using:', process.env.EMAIL_USER ? 'Production Gmail' : 'Test Account');
+        
         const info = await transporter.sendMail({
             from: '"Shadow Zone" <noreply@shadowzone.com>',
             to: email,
@@ -72,6 +74,10 @@ const sendOTPEmail = async (email, otp) => {
         console.error('Error sending email:', error);
         if (error.code === 'EAUTH') {
             console.error('Authentication failed. Check email credentials.');
+        } else if (error.code === 'ESOCKET') {
+            console.error('Network error. Check your internet connection.');
+        } else if (error.code === 'EENVELOPE') {
+            console.error('Invalid recipient email address.');
         }
         return false;
     }
