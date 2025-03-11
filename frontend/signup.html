@@ -4,42 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Shadow Zone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <header>
-        <div class="logo">Shadow Zone</div>
-    </header>
-    <main>
-        <h1>Create an Account</h1>
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
+    <div class="auth-container">
+        <div class="auth-wrapper">
+            <div class="auth-side">
+                <div class="brand">
+                    <div class="logo">
+                        <i class="fas fa-shield-alt"></i>
+                        Shadow Zone
+                    </div>
+                    <p class="tagline">Secure. Private. Yours.</p>
+                </div>
+                <div class="auth-features">
+                    <div class="feature">
+                        <i class="fas fa-lock"></i>
+                        <span>End-to-end encryption</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Private by design</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sync"></i>
+                        <span>Real-time sync</span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" required>
-            </div>
-            <button type="submit" class="cta">Sign Up</button>
-            <div class="error" id="signupError"></div>
-            <div class="success" id="signupSuccess"></div>
-        </form>
+            
+            <div class="auth-content">
+                <div class="auth-header">
+                    <h1>Create your account</h1>
+                    <p>Join Shadow Zone and take control of your digital life</p>
+                </div>
 
-        <form id="otpForm" style="display: none;">
-            <div class="form-group">
-                <label for="otp">Enter OTP sent to your email:</label>
-                <input type="text" id="otp" required>
-            </div>
-            <button type="submit" class="cta">Verify OTP</button>
-            <div class="error" id="otpError"></div>
-        </form>
+                <form id="signupForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            Email address
+                        </label>
+                        <input type="email" id="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="password" required placeholder="Create a strong password">
+                            <button type="button" class="toggle-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="error" id="signupError"></div>
+                    <div class="success" id="signupSuccess"></div>
+                    <button type="submit" class="btn-primary">
+                        <span>Create Account</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
 
-        <p>Already have an account? <a href="/signin.html">Sign In</a></p>
-    </main>
-    <footer>
-        <p>© 2024 Shadow Zone. All rights reserved.</p>
-    </footer>
+                <form id="otpForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="otp">
+                            <i class="fas fa-key"></i>
+                            Verification Code
+                        </label>
+                        <input type="text" id="otp" required placeholder="Enter 6-digit code" maxlength="6">
+                        <p class="help-text">We've sent a verification code to your email</p>
+                    </div>
+                    <div class="error" id="otpError"></div>
+                    <button type="submit" class="btn-primary">
+                        <span>Verify Account</span>
+                        <i class="fas fa-check"></i>
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="/signin.html">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="/js/signup.js" type="module"></script>
 </body>
