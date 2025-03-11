@@ -8,7 +8,7 @@ async function initializeAuth0() {
         auth0Client = await createAuth0Client({
             domain: 'dev-2d67b8khfvv4gi3r.us.auth0.com',
             client_id: 'Gy7RxKFNqwvEGBBHhiZZvBTNtVODGPB5',
-            redirect_uri: 'https://shadowzone.netlify.app/callback.html',
+            redirect_uri: 'http://localhost:3000/callback.html',
             cacheLocation: 'localstorage'
         });
 
@@ -75,7 +75,7 @@ async function updateUI() {
 async function login() {
     try {
         await auth0Client.loginWithRedirect({
-            redirect_uri: 'https://shadowzone.netlify.app/callback.html'
+            redirect_uri: 'http://localhost:3000/callback.html'
         });
     } catch (error) {
         console.error("Error during login:", error);
@@ -87,7 +87,7 @@ async function login() {
 async function signup() {
     try {
         await auth0Client.loginWithRedirect({
-            redirect_uri: 'https://shadowzone.netlify.app/callback.html',
+            redirect_uri: 'http://localhost:3000/callback.html',
             screen_hint: 'signup'
         });
     } catch (error) {
@@ -100,7 +100,7 @@ async function signup() {
 async function signupWithGoogle() {
     try {
         await auth0Client.loginWithRedirect({
-            redirect_uri: 'https://shadowzone.netlify.app/callback.html',
+            redirect_uri: 'http://localhost:3000/callback.html',
             connection: 'google-oauth2'
         });
     } catch (error) {
@@ -113,7 +113,7 @@ async function signupWithGoogle() {
 async function logout() {
     try {
         await auth0Client.logout({
-            returnTo: 'https://shadowzone.netlify.app'
+            returnTo: 'http://localhost:3000'
         });
     } catch (error) {
         console.error("Error during logout:", error);

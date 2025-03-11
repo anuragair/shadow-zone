@@ -43,14 +43,14 @@
                 </div>
 
                 <div class="auth-buttons">
-                    <button onclick="signup()" class="btn-primary">
+                    <button onclick="window.signup()" class="btn-primary">
                         <i class="fas fa-envelope"></i>
                         <span>Sign up with Email</span>
                     </button>
                     <div class="auth-divider">
                         <span>or</span>
                     </div>
-                    <button onclick="signupWithGoogle()" class="btn-secondary">
+                    <button onclick="window.signupWithGoogle()" class="btn-secondary">
                         <i class="fab fa-google"></i>
                         <span>Continue with Google</span>
                     </button>
@@ -63,20 +63,11 @@
         </div>
     </div>
 
-    <script src="js/auth.js"></script>
-    <script>
-        // Additional signup with Google function
-        async function signupWithGoogle() {
-            try {
-                await auth0Client.loginWithRedirect({
-                    redirect_uri: 'https://shadowzone.netlify.app/callback',
-                    screen_hint: 'signup',
-                    connection: 'google-oauth2'
-                });
-            } catch (error) {
-                console.error("Error during Google signup:", error);
-            }
-        }
+    <script type="module">
+        import { signup, signupWithGoogle } from './js/auth.js';
+        // Make functions available globally
+        window.signup = signup;
+        window.signupWithGoogle = signupWithGoogle;
     </script>
 </body>
 </html>
