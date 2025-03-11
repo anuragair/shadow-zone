@@ -1,53 +1,65 @@
 // signup.js
 
-document.getElementById('signupForm').addEventListener('submit', async function(e) {
+import config from './config.js';
+
+const signupForm = document.getElementById('signupForm');
+const otpForm = document.getElementById('otpForm');
+const signupError = document.getElementById('signupError');
+const signupSuccess = document.getElementById('signupSuccess');
+const otpError = document.getElementById('otpError');
+let userEmail = '';
+
+signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const emailOrPhone = document.getElementById('emailOrPhone').value;
+    const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    // Basic validation
-    if (emailOrPhone === '' || password === '' || confirmPassword === '') {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        alert('Passwords do not match.');
-        return;
-    }
-
-    if (password.length < 6) {
-        alert('Password must be at least 6 characters long.');
-        return;
-    }
 
     try {
-        // Determine if input is email or phone
-        const isEmail = emailOrPhone.includes('@');
-        const userData = {
-            [isEmail ? 'email' : 'phone']: emailOrPhone,
-            password: password
-        };
-
-        const response = await fetch('http://localhost:3000/api/users/register', {
+        const response = await fetch(`${config.API_URL}/users/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || 'Registration failed');
+            throw new Error(data.message || 'Signup failed');
         }
 
-        alert('Sign up successful! You can now sign in.');
-        window.location.href = 'signin.html';
+        userEmail = email;
+        signupSuccess.textContent = 'OTP sent to your email';
+        signupForm.style.display = 'none';
+        otpForm.style.display = 'block';
     } catch (error) {
-        alert(error.message || 'An error occurred during registration.');
+        signupError.textContent = error.message;
+    }
+});
+
+otpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const otp = document.getElementById('otp').value;
+
+    try {
+        const response = await fetch(`${config.API_URL}/users/verify-signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: userEmail, otp })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'OTP verification failed');
+        }
+
+        localStorage.setItem('token', data.token);
+        window.location.href = '/dashboard.html';
+    } catch (error) {
+        otpError.textContent = error.message;
     }
 });

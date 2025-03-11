@@ -1,9 +1,11 @@
 // dashboard.js
 
-// Check if user is logged in
+import config from './config.js';
+
+// Check if user is authenticated
 const token = localStorage.getItem('token');
 if (!token) {
-    window.location.href = 'signin.html';
+    window.location.href = '/signin.html';
 }
 
 // Get user data
@@ -14,39 +16,35 @@ const notesList = document.getElementById('notesList');
 const addNoteForm = document.getElementById('addNoteForm');
 const noteInput = document.getElementById('noteInput');
 const userDisplay = document.getElementById('userDisplay');
+const signOutBtn = document.getElementById('signOutBtn');
 
 // Display username
 if (userDisplay) {
     userDisplay.textContent = `Welcome, ${user.email || user.phone}`;
 }
 
-// API headers with authentication
-const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-};
-
-// Fetch and render notes
-async function fetchNotes() {
+// Load notes
+async function loadNotes() {
     try {
-        const response = await fetch('http://localhost:3000/api/notes', {
-            headers: headers
+        const response = await fetch(`${config.API_URL}/notes`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
-        
+
         if (!response.ok) {
-            throw new Error('Failed to fetch notes');
+            throw new Error('Failed to load notes');
         }
 
         const notes = await response.json();
-        renderNotes(notes);
+        displayNotes(notes);
     } catch (error) {
-        console.error('Error fetching notes:', error);
-        alert('Failed to load notes');
+        console.error('Error loading notes:', error);
     }
 }
 
-// Render notes
-function renderNotes(notes) {
+// Display notes
+function displayNotes(notes) {
     if (!notesList) return;
     
     notesList.innerHTML = '';
@@ -64,60 +62,59 @@ function renderNotes(notes) {
     });
 }
 
-// Add new note
-if (addNoteForm) {
-    addNoteForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!noteInput.value.trim()) return;
+// Add note
+addNoteForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const content = document.getElementById('noteInput').value;
 
-        try {
-            const response = await fetch('http://localhost:3000/api/notes', {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({
-                    content: noteInput.value
-                })
-            });
+    try {
+        const response = await fetch(`${config.API_URL}/notes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ content })
+        });
 
-            if (!response.ok) {
-                throw new Error('Failed to add note');
-            }
-
-            noteInput.value = '';
-            fetchNotes(); // Refresh notes list
-        } catch (error) {
-            console.error('Error adding note:', error);
-            alert('Failed to add note');
+        if (!response.ok) {
+            throw new Error('Failed to add note');
         }
-    });
-}
+
+        document.getElementById('noteInput').value = '';
+        loadNotes();
+    } catch (error) {
+        console.error('Error adding note:', error);
+    }
+});
 
 // Delete note
-async function deleteNote(noteId) {
+window.deleteNote = async (noteId) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/notes/${noteId}`, {
+        const response = await fetch(`${config.API_URL}/notes/${noteId}`, {
             method: 'DELETE',
-            headers: headers
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
         if (!response.ok) {
             throw new Error('Failed to delete note');
         }
 
-        fetchNotes(); // Refresh notes list
+        loadNotes();
     } catch (error) {
         console.error('Error deleting note:', error);
-        alert('Failed to delete note');
     }
-}
+};
 
-// Sign out functionality
-document.getElementById('signOutBtn')?.addEventListener('click', () => {
+// Sign out
+signOutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('isLoggedIn');
-    window.location.href = 'index.html';
+    window.location.href = '/signin.html';
 });
 
-// Initial load
-fetchNotes();
+// Load notes when page loads
+loadNotes();

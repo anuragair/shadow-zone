@@ -1,43 +1,65 @@
 // signin.js
 
-document.getElementById('signinForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+import config from './config.js';
 
-    const emailOrPhone = document.getElementById('emailOrPhone').value;
+const signinForm = document.getElementById('signinForm');
+const otpForm = document.getElementById('otpForm');
+const signinError = document.getElementById('signinError');
+const signinSuccess = document.getElementById('signinSuccess');
+const otpError = document.getElementById('otpError');
+let userEmail = '';
+
+signinForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    // Basic validation
-    if (emailOrPhone === '' || password === '') {
-        alert('Please fill in all fields.');
-        return;
-    }
-
     try {
-        const response = await fetch('http://localhost:3000/api/users/login', {
+        const response = await fetch(`${config.API_URL}/users/signin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                emailOrPhone: emailOrPhone,
-                password: password
-            })
+            body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || 'Login failed');
+            throw new Error(data.message || 'Signin failed');
         }
 
-        // Store token and user data
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('isLoggedIn', 'true');
-
-        // Redirect to dashboard
-        window.location.href = 'dashboard.html';
+        userEmail = email;
+        signinSuccess.textContent = 'OTP sent to your email';
+        signinForm.style.display = 'none';
+        otpForm.style.display = 'block';
     } catch (error) {
-        alert(error.message || 'An error occurred during login.');
+        signinError.textContent = error.message;
+    }
+});
+
+otpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const otp = document.getElementById('otp').value;
+
+    try {
+        const response = await fetch(`${config.API_URL}/users/verify-signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: userEmail, otp })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'OTP verification failed');
+        }
+
+        localStorage.setItem('token', data.token);
+        window.location.href = '/dashboard.html';
+    } catch (error) {
+        otpError.textContent = error.message;
     }
 });
