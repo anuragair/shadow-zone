@@ -15,6 +15,9 @@ signupForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
 
     try {
+        signupError.textContent = '';
+        signupSuccess.textContent = 'Sending OTP...';
+        
         const response = await fetch(`${config.API_URL}/users/signup`, {
             method: 'POST',
             headers: {
@@ -33,7 +36,10 @@ signupForm.addEventListener('submit', async (e) => {
         signupSuccess.textContent = 'OTP sent to your email';
         signupForm.style.display = 'none';
         otpForm.style.display = 'block';
+        otpForm.classList.add('visible');
+        document.getElementById('otp').focus();
     } catch (error) {
+        signupSuccess.textContent = '';
         signupError.textContent = error.message;
     }
 });
@@ -43,6 +49,7 @@ otpForm.addEventListener('submit', async (e) => {
     const otp = document.getElementById('otp').value;
 
     try {
+        otpError.textContent = '';
         const response = await fetch(`${config.API_URL}/users/verify-signup`, {
             method: 'POST',
             headers: {
@@ -57,6 +64,7 @@ otpForm.addEventListener('submit', async (e) => {
             throw new Error(data.message || 'OTP verification failed');
         }
 
+        // Store the token and redirect to dashboard
         localStorage.setItem('token', data.token);
         window.location.href = '/dashboard.html';
     } catch (error) {
