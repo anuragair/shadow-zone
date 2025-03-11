@@ -4,173 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - Shadow Zone</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #666;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .error {
-            color: #dc3545;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .success {
-            color: #28a745;
-            margin-top: 10px;
-            text-align: center;
-        }
-        #otpForm {
-            display: none;
-        }
-        .link {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .link a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="container">
+    <header>
+        <div class="logo">Shadow Zone</div>
+    </header>
+    <main>
         <h1>Sign In</h1>
-        
-        <!-- Initial signin form -->
         <form id="signinForm">
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
+                <label for="emailOrPhone">Email or Phone Number:</label>
+                <input type="text" id="emailOrPhone" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Password:</label>
                 <input type="password" id="password" required>
             </div>
-            <button type="submit">Sign In</button>
-            <div class="error" id="signinError"></div>
-            <div class="success" id="signinSuccess"></div>
+            <button type="submit" class="cta">Sign Up</button>
         </form>
+        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </main>
+    <footer>
+        <p>© 2023 Shadow Zone. All rights reserved.</p>
+    </footer>
 
-        <!-- OTP verification form -->
-        <form id="otpForm">
-            <div class="form-group">
-                <label for="otp">Enter OTP sent to your email</label>
-                <input type="text" id="otp" required>
-            </div>
-            <button type="submit">Verify OTP</button>
-            <div class="error" id="otpError"></div>
-        </form>
-
-        <div class="link">
-            Don't have an account? <a href="signup.html">Sign Up</a>
-        </div>
-    </div>
-
-    <script>
-        const signinForm = document.getElementById('signinForm');
-        const otpForm = document.getElementById('otpForm');
-        const signinError = document.getElementById('signinError');
-        const signinSuccess = document.getElementById('signinSuccess');
-        const otpError = document.getElementById('otpError');
-        let userEmail = '';
-
-        signinForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                const response = await fetch('http://localhost:3000/api/users/signin', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Signin failed');
-                }
-
-                userEmail = email;
-                signinSuccess.textContent = 'OTP sent to your email';
-                signinForm.style.display = 'none';
-                otpForm.style.display = 'block';
-            } catch (error) {
-                signinError.textContent = error.message;
-            }
-        });
-
-        otpForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const otp = document.getElementById('otp').value;
-
-            try {
-                const response = await fetch('http://localhost:3000/api/users/verify-signin', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email: userEmail, otp })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'OTP verification failed');
-                }
-
-                localStorage.setItem('token', data.token);
-                window.location.href = 'dashboard.html';
-            } catch (error) {
-                otpError.textContent = error.message;
-            }
-        });
-    </script>
+    <script src="/js/signin.js"></script>
 </body>
-</html> 
+</html>
