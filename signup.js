@@ -1,8 +1,7 @@
 // signup.js
 
-document.getElementById('signupForm').addEventListener('submit', function(e) {
-    console.log('Form submitted');
-    e.preventDefault(); // Prevent the default form submission
+document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
     const emailOrPhone = document.getElementById('emailOrPhone').value;
     const password = document.getElementById('password').value;
@@ -24,24 +23,31 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
         return;
     }
 
-    // Get existing users or initialize empty array
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    try {
+        // Determine if input is email or phone
+        const isEmail = emailOrPhone.includes('@');
+        const userData = {
+            [isEmail ? 'email' : 'phone']: emailOrPhone,
+            password: password
+        };
 
-    // Check if user already exists
-    if (users.some(user => user.emailOrPhone === emailOrPhone)) {
-        alert('This email/phone is already registered.');
-        return;
+        const response = await fetch('http://localhost:3000/api/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Registration failed');
+        }
+
+        alert('Sign up successful! You can now sign in.');
+        window.location.href = 'signin.html';
+    } catch (error) {
+        alert(error.message || 'An error occurred during registration.');
     }
-
-    // Add new user
-    users.push({
-        emailOrPhone: emailOrPhone,
-        password: password  // In a real app, this should be hashed
-    });
-
-    // Save updated users array
-    localStorage.setItem('users', JSON.stringify(users));
-
-    alert('Sign up successful! You can now sign in.');
-    window.location.href = 'signin.html';
 });

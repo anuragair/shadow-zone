@@ -1,7 +1,7 @@
 // signin.js
 
-document.getElementById('signinForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent the default form submission
+document.getElementById('signinForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
     const emailOrPhone = document.getElementById('emailOrPhone').value;
     const password = document.getElementById('password').value;
@@ -12,24 +12,32 @@ document.getElementById('signinForm').addEventListener('submit', function(e) {
         return;
     }
 
-    // Get users from localStorage
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    try {
+        const response = await fetch('http://localhost:3000/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                emailOrPhone: emailOrPhone,
+                password: password
+            })
+        });
 
-    // Find user with matching credentials
-    const user = users.find(u => u.emailOrPhone === emailOrPhone && u.password === password);
+        const data = await response.json();
 
-    if (!user) {
-        alert('Invalid email/phone or password.');
-        return;
+        if (!response.ok) {
+            throw new Error(data.message || 'Login failed');
+        }
+
+        // Store token and user data
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('isLoggedIn', 'true');
+
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+    } catch (error) {
+        alert(error.message || 'An error occurred during login.');
     }
-
-    // Login successful
-    console.log('Signing in with:', emailOrPhone);
-    
-    // Store user session
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('user', emailOrPhone);
-
-    // Redirect to dashboard
-    window.location.href = 'dashboard.html';
 });
