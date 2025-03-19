@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow Zone - Your Secure Digital Space</title>
+    <title>Shadow Zone - Secure Collaborative Notes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
@@ -12,67 +12,189 @@
     <div class="landing-container">
         <nav class="main-nav">
             <div class="nav-brand">
-                <i class="fas fa-shield-alt"></i>
+                <i class="fas fa-shield-alt brand-icon"></i>
                 <span>Shadow Zone</span>
             </div>
             <div class="nav-links">
                 <a href="#features">Features</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
+                <a href="#demo">Live Demo</a>
+                <a href="#pricing">Pricing</a>
                 <a href="signin.html" class="btn-secondary">Sign In</a>
-                <a href="signup.html" class="btn-primary">Sign Up</a>
+                <a href="signup.html" class="btn-primary">Get Started</a>
             </div>
         </nav>
 
         <main class="hero-section">
             <div class="hero-content">
-                <h1>Welcome to Shadow Zone</h1>
-                <p class="hero-tagline">Your secure collaborative space for notes and reminders. Built with privacy in mind.</p>
+                <h1>Collaborate Securely in Real-Time</h1>
+                <p class="hero-tagline">Experience the future of secure note-taking with end-to-end encryption and real-time collaboration.</p>
                 <div class="hero-buttons">
-                    <a href="signup.html" class="btn-primary">
-                        <span>Get Started</span>
+                    <a href="signup.html" class="btn-primary pulse">
+                        <span>Start For Free</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
-                    <a href="#features" class="btn-secondary">
-                        <span>Learn More</span>
-                        <i class="fas fa-info-circle"></i>
+                    <a href="#demo" class="btn-secondary">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Watch Demo</span>
                     </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">256-bit</span>
+                        <span class="stat-label">Encryption</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="collaboration-demo">
+                    <div class="demo-window">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="window-title">Team Notes</div>
+                        </div>
+                        <div class="window-content">
+                            <div class="note-preview">
+                                <div class="user-cursor">
+                                    <span class="cursor-label">Alice</span>
+                                </div>
+                                <div class="note-text">
+                                    <p>Project Roadmap 2025</p>
+                                    <ul>
+                                        <li>Launch new features ✨</li>
+                                        <li>Improve collaboration tools 🤝</li>
+                                        <li>Enhanced security measures 🔒</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
 
         <section id="features" class="features-section">
-            <h2>Why Choose Shadow Zone?</h2>
+            <h2>Why Teams Choose Shadow Zone</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Collaborative Notes</h3>
-                    <p>Work together in real-time with end-to-end encryption.</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Real-Time Collaboration</h3>
+                    <p>See changes instantly as your team works together, with live cursors and presence indicators.</p>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-user-shield"></i>
-                    <h3>User Profiles</h3>
-                    <p>Customize your space while maintaining privacy.</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>End-to-End Encryption</h3>
+                    <p>Your notes are encrypted before they leave your device, ensuring complete privacy.</p>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-user-friends"></i>
-                    <h3>Friend Requests</h3>
-                    <p>Connect securely with other users.</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Version History</h3>
+                    <p>Track changes and restore previous versions with our comprehensive history system.</p>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-photo-video"></i>
-                    <h3>Multimedia Support</h3>
-                    <p>Share and store various types of media securely.</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Rich Integrations</h3>
+                    <p>Connect with your favorite tools and enhance your workflow seamlessly.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="demo-section">
+            <h2>See It In Action</h2>
+            <div class="demo-container">
+                <div class="demo-video">
+                    <video poster="assets/demo-poster.jpg" controls>
+                        <source src="assets/demo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing-section">
+            <h2>Simple, Transparent Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <div class="price">$0</div>
+                        <p>Perfect for personal use</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Up to 3 collaborators</li>
+                        <li><i class="fas fa-check"></i> Basic encryption</li>
+                        <li><i class="fas fa-check"></i> 5GB storage</li>
+                    </ul>
+                    <a href="signup.html" class="btn-secondary">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <div class="price">$12<span>/mo</span></div>
+                        <p>For growing teams</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Unlimited collaborators</li>
+                        <li><i class="fas fa-check"></i> Advanced encryption</li>
+                        <li><i class="fas fa-check"></i> 100GB storage</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <a href="signup.html" class="btn-primary">Start Free Trial</a>
                 </div>
             </div>
         </section>
 
         <footer class="main-footer">
-            <p>&copy; 2024 Shadow Zone. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#terms">Terms of Service</a>
-                <a href="#contact">Contact Us</a>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Shadow Zone</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#security">Security</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#about">About</a>
+                        <a href="#blog">Blog</a>
+                        <a href="#careers">Careers</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="#docs">Documentation</a>
+                        <a href="#help">Help Center</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Shadow Zone. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
             </div>
         </footer>
     </div>
